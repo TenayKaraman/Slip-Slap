@@ -127,10 +127,19 @@ public class GridManager : MonoBehaviour
             return true; // Sýnýr dýþý = engellenmiþ
         }
 
-        // Statik engeller (duvar, kapý vs.)
+        // Statik engeller (duvar, kapý vs.) - Kristaller engel deðil!
         if (staticMap.ContainsKey(gridPos))
         {
-            return true;
+            GameObject obj = staticMap[gridPos];
+            if (obj != null)
+            {
+                // Eðer kristal ise engel deðil
+                Crystal crystal = obj.GetComponent<Crystal>();
+                if (crystal != null) return false;
+
+                // Diðer statik objeler engel
+                return true;
+            }
         }
 
         // Hareketli engeller (blok, düþman vs.)
@@ -155,6 +164,7 @@ public class GridManager : MonoBehaviour
         entityMap.TryGetValue(gridPos, out GridEntity entity);
         return entity;
     }
+
     bool IsCrystalType(LevelData.TileType type)
     {
         return type == LevelData.TileType.CrystalRed ||
@@ -214,7 +224,6 @@ public class GridManager : MonoBehaviour
                 instance.name = $"{c.type}_{c.pos.x}_{c.pos.y}";
 
                 // KRISTAL ÝSE ÖZEL ÝÞLEM
-                // BuildLevel metodunda kristal oluþtururken:
                 if (IsCrystalType(c.type))
                 {
                     Debug.Log($"Creating crystal at {c.pos}: {c.type}");
@@ -223,11 +232,19 @@ public class GridManager : MonoBehaviour
                     {
                         crystalComponent.crystalType = GetCrystalTypeEnum(c.type);
                         Debug.Log($"Crystal component assigned: {crystalComponent.crystalType}");
+
+                        // Kristali static map'e ekle (toplama için gerekli)
+                        staticMap[c.pos] = instance;
                     }
                     else
                     {
                         Debug.LogError($"Crystal prefab {c.type} doesn't have Crystal component!");
                     }
+                }
+                else
+                {
+                    // Diðer statik objeler (duvar, blok vs.) de static map'e eklensin
+                    staticMap[c.pos] = instance;
                 }
             }
         }
@@ -259,9 +276,7 @@ public class GridManager : MonoBehaviour
                     InputManager.Instance.player = playerEntity;
                 }
             }
-
         }
-
 
         Debug.Log($"Level built successfully! Static objects: {staticMap.Count}, Entities: {entityMap.Count}");
     }

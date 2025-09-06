@@ -68,13 +68,10 @@ public class GameManager : MonoBehaviour
     public void CollectCrystal(int amount = 1)
     {
         crystalsCollected += amount;
-        Debug.Log($"Crystals collected: {crystalsCollected}");
+        Debug.Log($"[GameManager] Crystals collected: {crystalsCollected} (+{amount})");
 
-        // UI'ı güncelle
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.UpdateUI();
-        }
+        // UI'ı güncelle - Hemen güncelle
+        UpdateUI();
     }
 
     public void SpendLife()
@@ -83,14 +80,27 @@ public class GameManager : MonoBehaviour
         Debug.Log($"Lives remaining: {playerLives}");
 
         // UI'ı güncelle
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.UpdateUI();
-        }
+        UpdateUI();
 
         if (playerLives <= 0)
         {
             GameOver();
+        }
+    }
+
+    /// <summary>
+    /// UI'ı hemen güncelle (UIManager'a bildir)
+    /// </summary>
+    private void UpdateUI()
+    {
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateUI();
+            Debug.Log("[GameManager] UI updated");
+        }
+        else
+        {
+            Debug.LogWarning("[GameManager] UIManager.Instance is null - cannot update UI");
         }
     }
 }

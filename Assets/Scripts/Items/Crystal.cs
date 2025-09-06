@@ -11,7 +11,7 @@ public class Crystal : MonoBehaviour
     public float pulseScale = 0.1f;
 
     private Vector3 originalScale;
-    private bool isCollected = false;
+    public bool isCollected = false; // Bu field public yapýldý
 
     public enum CrystalType
     {
@@ -75,7 +75,12 @@ public class Crystal : MonoBehaviour
         // GameManager'a kristal toplandýðýný bildir
         if (GameManager.Instance != null)
         {
+            Debug.Log($"[Crystal] Calling GameManager.CollectCrystal({crystalValue})");
             GameManager.Instance.CollectCrystal(crystalValue);
+        }
+        else
+        {
+            Debug.LogError("[Crystal] GameManager.Instance is null!");
         }
 
         // CrystalManager'a tipine göre bildir (yetenek sistemi için)
@@ -118,7 +123,7 @@ public class Crystal : MonoBehaviour
     }
 
     /// <summary>
-    /// Trigger ile player tespiti
+    /// Trigger ile player tespiti (backup sistem)
     /// </summary>
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -129,12 +134,8 @@ public class Crystal : MonoBehaviour
         Player player = other.GetComponent<Player>();
         if (player != null)
         {
-            Debug.Log("Player detected - collecting crystal");
+            Debug.Log("Player detected via trigger - collecting crystal");
             CollectCrystal(player);
-        }
-        else
-        {
-            Debug.Log("Not a player object");
         }
     }
 }
