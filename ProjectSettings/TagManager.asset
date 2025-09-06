@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags: []
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - GridObstacles
+  - Entities
+  - Player
+  - Crystals
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Background
+    uniqueID: 1278440285
+    locked: 0
+  - name: 'Tiles '
+    uniqueID: 1580179163
+    locked: 0
+  - name: Entities
+    uniqueID: 462981445
+    locked: 0
+  - name: FX
+    uniqueID: 999099415
+    locked: 0
+  - name: UI
+    uniqueID: 797876797
+    locked: 0
