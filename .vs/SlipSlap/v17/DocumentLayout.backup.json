@@ -3,28 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|c:\\users\\tenqk\\unity projeler\\slipslap\\assets\\scripts\\items\\crystal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\items\\crystal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\items\\crystal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|c:\\users\\tenqk\\unity projeler\\slipslap\\assets\\scripts\\core\\crystalmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\crystalmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\core\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\gridsystem\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gridsystem\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|c:\\users\\tenqk\\unity projeler\\slipslap\\assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\core\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\gamemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\core\\crystalmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\crystalmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\gridsystem\\gridentity.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -50,11 +50,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 8,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "CrystalManager.cs",
               "DocumentMoniker": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Core\\CrystalManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\CrystalManager.cs",
@@ -62,8 +62,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Core\\CrystalManager.cs",
               "ViewState": "AgIAACAAAAAAAAAAAAAcwHMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-06T11:10:06.026Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-06T11:10:06.026Z"
             },
             {
               "$type": "Document",
@@ -73,20 +72,20 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Items\\Crystal.cs",
               "ToolTip": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Items\\Crystal.cs",
               "RelativeToolTip": "Assets\\Scripts\\Items\\Crystal.cs",
-              "ViewState": "AgIAAFoAAAAAAAAAAAA4wIoAAAAFAAAAAAAAAA==",
+              "ViewState": "AgIAAE8AAAAAAAAAAAAuwIwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-06T11:08:40.741Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "GridManager.cs",
               "DocumentMoniker": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\GridSystem\\GridManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\GridSystem\\GridManager.cs",
               "ToolTip": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\GridSystem\\GridManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\GridSystem\\GridManager.cs",
-              "ViewState": "AgIAAL8AAAAAAAAAAAAswOYAAAARAAAAAAAAAA==",
+              "ViewState": "AgIAAAkBAAAAAAAAAAAuwEYBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-04T10:39:30.142Z",
               "EditorCaption": ""
@@ -99,9 +98,10 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\GridSystem\\Player.cs",
               "ToolTip": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\GridSystem\\Player.cs",
               "RelativeToolTip": "Assets\\Scripts\\GridSystem\\Player.cs",
-              "ViewState": "AgIAAFIAAAAAAAAAAAAcwI0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAHkAAAAAAAAAAAAuwLYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T19:31:48.177Z"
+              "WhenOpened": "2025-09-03T19:31:48.177Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -153,27 +153,29 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "UIManager.cs",
               "DocumentMoniker": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Core\\UIManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\UIManager.cs",
               "ToolTip": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Core\\UIManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Core\\UIManager.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAuwFUAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAuwJgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T18:24:36.297Z"
+              "WhenOpened": "2025-09-02T18:24:36.297Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 2,
               "Title": "GameManager.cs",
               "DocumentMoniker": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Core\\GameManager.cs",
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\GameManager.cs",
               "ToolTip": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Core\\GameManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Core\\GameManager.cs",
-              "ViewState": "AgIAACIAAAAAAAAAAAA8wF8AAAABAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAuwGkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T18:22:28.362Z"
+              "WhenOpened": "2025-09-02T18:22:28.362Z",
+              "EditorCaption": ""
             }
           ]
         }

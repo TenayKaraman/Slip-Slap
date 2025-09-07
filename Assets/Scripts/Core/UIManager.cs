@@ -48,9 +48,22 @@ public class UIManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"[UIManager] Scene loaded: {scene.name} - Refreshing UI references");
-        // Yeni scene yüklendiðinde UI referanslarýný tekrar bul
-        Invoke("DelayedRefresh", 0.1f);
+
+        // Eski referanslarý temizle
+        livesText = null;
+        crystalsText = null;
+        levelText = null;
+
+        StartCoroutine(RefreshNextFrame());
     }
+
+    System.Collections.IEnumerator RefreshNextFrame()
+    {
+        yield return null; // 1 frame bekle
+        FindUIReferences();
+        UpdateUI();
+    }
+
 
     void FindUIReferences()
     {

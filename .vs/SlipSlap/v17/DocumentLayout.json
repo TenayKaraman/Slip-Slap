@@ -3,7 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|c:\\users\\tenqk\\unity projeler\\slipslap\\assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\core\\uimanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -19,7 +19,7 @@
       "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gridsystem\\player.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|c:\\users\\tenqk\\unity projeler\\slipslap\\assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|C:\\Users\\tenqk\\unity projeler\\SlipSlap\\assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8375D5CB-5C88-10EC-B52A-1ED2E7F06C6C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\gridsystem\\gridmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -74,8 +74,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Items\\Crystal.cs",
               "ViewState": "AgIAAE8AAAAAAAAAAAAuwIwAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-06T11:08:40.741Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-06T11:08:40.741Z"
             },
             {
               "$type": "Document",
@@ -87,8 +86,7 @@
               "RelativeToolTip": "Assets\\Scripts\\GridSystem\\GridManager.cs",
               "ViewState": "AgIAAAkBAAAAAAAAAAAuwEYBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-04T10:39:30.142Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-04T10:39:30.142Z"
             },
             {
               "$type": "Document",
@@ -100,8 +98,7 @@
               "RelativeToolTip": "Assets\\Scripts\\GridSystem\\Player.cs",
               "ViewState": "AgIAAHkAAAAAAAAAAAAuwLYAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-03T19:31:48.177Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-03T19:31:48.177Z"
             },
             {
               "$type": "Document",
@@ -159,7 +156,7 @@
               "RelativeDocumentMoniker": "Assets\\Scripts\\Core\\UIManager.cs",
               "ToolTip": "C:\\Users\\tenqk\\unity projeler\\SlipSlap\\Assets\\Scripts\\Core\\UIManager.cs",
               "RelativeToolTip": "Assets\\Scripts\\Core\\UIManager.cs",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAuwJgAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAgwEEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-09-02T18:24:36.297Z",
               "EditorCaption": ""
@@ -174,8 +171,7 @@
               "RelativeToolTip": "Assets\\Scripts\\Core\\GameManager.cs",
               "ViewState": "AgIAACwAAAAAAAAAAAAuwGkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-09-02T18:22:28.362Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-09-02T18:22:28.362Z"
             }
           ]
         }
