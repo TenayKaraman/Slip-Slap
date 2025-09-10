@@ -230,8 +230,18 @@ public class GridManager : MonoBehaviour
                     Crystal crystalComponent = instance.GetComponent<Crystal>();
                     if (crystalComponent != null)
                     {
-                        crystalComponent.crystalType = GetCrystalTypeEnum(c.type);
-                        Debug.Log($"Crystal component assigned: {crystalComponent.crystalType}");
+                        // ÖNCEKÝ HATA: crystalComponent.crystalType = GetCrystalTypeEnum(c.type);
+                        // DÜZELTÝLEN: Crystal component'in SetCrystalType metodu varsa onu kullan,
+                        // yoksa direkt prefab'da ayarlý olmasý gerekiyor
+
+                        // Kristal tipi prefab'da zaten ayarlý olmalý, ama emin olmak için:
+                        Crystal.CrystalType targetType = GetCrystalTypeEnum(c.type);
+
+                        // Crystal component'te crystalType field'i private olduðu için
+                        // SerializedProperty ile ayarlayamayýz. En iyi çözüm:
+                        // Her kristal tipi için ayrý prefab kullanmak ve prefab'da ayarlamak
+
+                        Debug.Log($"Crystal component found - expected type: {targetType}, actual type: {crystalComponent.GetCrystalType()}");
 
                         // Kristali static map'e ekle (toplama için gerekli)
                         staticMap[c.pos] = instance;

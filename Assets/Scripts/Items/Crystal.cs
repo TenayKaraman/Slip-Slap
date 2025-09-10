@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections;
-using static Crystal;
 
 /// <summary>
 /// Crystal - Aþama 4 Refactor
@@ -285,7 +284,7 @@ public class Crystal : MonoBehaviour
     // UTILITY METHODS
     public string GetAbilityName()
     {
-        return _crystalType switch
+        return crystalType switch
         {
             CrystalType.Red => "Iþýn Kýlýcý",
             CrystalType.Blue => "EMP Kristali",
@@ -295,7 +294,7 @@ public class Crystal : MonoBehaviour
         };
     }
 
-    public CrystalType GetCrystalType() => _crystalType;
+    public CrystalType GetCrystalType() => crystalType;
     public int GetValue() => crystalValue;
     public bool IsCollected() => isCollected;
 
