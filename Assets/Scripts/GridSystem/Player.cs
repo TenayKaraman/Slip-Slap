@@ -1,4 +1,4 @@
-﻿// Scripts/GridSystem/Player.cs - Sürekli kristal kontrol sistemi
+﻿// Scripts/GridSystem/Player.cs - Çalışan versiyon + minimal iyileştirmeler
 using System.Collections;
 using UnityEngine;
 
@@ -6,6 +6,10 @@ public class Player : GridEntity
 {
     [Header("Slide Settings")]
     [SerializeField] private float slideSpeed = 12f;
+
+    [Header("Debug Settings")]
+    [SerializeField] private bool enableMovementLogs = false;
+    [SerializeField] private bool enablePickupLogs = true;
 
     private bool isSliding = false;
     private Vector2Int currentSlideDirection = Vector2Int.zero;
@@ -19,7 +23,7 @@ public class Player : GridEntity
             // Ters yönde swipe → frenleme
             if (direction == -currentSlideDirection)
             {
-                Debug.Log("[Player] Reverse swipe detected - stopping slide!");
+                LogMovement("[Player] Reverse swipe detected - stopping slide!");
                 isSliding = false; // Coroutine kendi kendini bitirecek
                 currentSlideDirection = Vector2Int.zero;
 
@@ -28,7 +32,7 @@ public class Player : GridEntity
                 return;
             }
 
-            Debug.Log("[Player] Already sliding - ignoring input.");
+            LogMovement("[Player] Already sliding - ignoring input.");
             return;
         }
 
@@ -45,7 +49,7 @@ public class Player : GridEntity
         isSliding = true;
         currentSlideDirection = direction;
 
-        Debug.Log($"[Player] === SLIDE START === Direction: {direction}, Grid: {gridPosition}, World: {transform.position}");
+        LogMovement($"[Player] === SLIDE START === Direction: {direction}, Grid: {gridPosition}, World: {transform.position}");
 
         // Her grid hücresini tek tek kayma sistemi
         while (isSliding)
@@ -55,7 +59,7 @@ public class Player : GridEntity
             // Sonraki pozisyon engellenmiş mi kontrol et
             if (!CanMoveTo(nextGridPos))
             {
-                Debug.Log($"[Player] Blocked at {nextGridPos} - slide finished");
+                LogMovement($"[Player] Blocked at {nextGridPos} - slide finished");
                 break;
             }
 
@@ -82,22 +86,22 @@ public class Player : GridEntity
                 yield return null;
             }
 
-            // Grid pozisyonunu güncelle
+            // Grid pozisyonunu güncelle - BU SATIRLAR ÇOK KRİTİK
             if (isSliding)
             {
-                transform.position = targetWorldPos;
-                gridPosition = nextGridPos;
-                GridManager.Instance.entityMap[gridPosition] = this;
+                transform.position = targetWorldPos; // EXACT pozisyon
+                gridPosition = nextGridPos; // Grid koordinat güncelle
+                GridManager.Instance.entityMap[gridPosition] = this; // Map'e ekle
 
                 // Her grid hücresine geldiğinde pickup kontrolü yap
                 CheckForPickups();
 
-                Debug.Log($"[Player] Moved to grid {gridPosition}");
+                LogMovement($"[Player] Moved to grid {gridPosition}");
             }
         }
 
         // Kayma tamamlandı
-        Debug.Log($"[Player] === SLIDE END === Final Grid: {gridPosition}");
+        LogMovement($"[Player] === SLIDE END === Final Grid: {gridPosition}");
         isSliding = false;
         currentSlideDirection = Vector2Int.zero;
         activeSlideRoutine = null;
@@ -116,7 +120,7 @@ public class Player : GridEntity
 
             if (crystal != null && !crystal.isCollected)
             {
-                Debug.Log($"[Player] Crystal found at {gridPosition} - collecting!");
+                LogPickup($"[Player] Crystal found at {gridPosition} - collecting!");
                 crystal.CollectCrystal(this);
                 GridManager.Instance.staticMap.Remove(gridPosition);
             }
@@ -134,7 +138,7 @@ public class Player : GridEntity
         if (GridManager.Instance.levelData != null &&
             gridPosition == GridManager.Instance.levelData.exitPortal)
         {
-            Debug.Log("[Player] Portal reached - Level Complete!");
+            LogPickup("[Player] Portal reached - Level Complete!");
 
             // Level tamamlama işlemi
             if (GameManager.Instance != null)
@@ -168,7 +172,7 @@ public class Player : GridEntity
         // Snap sonrası da pickup kontrolü yap
         CheckForPickups();
 
-        Debug.Log($"[Player] Snapped to Grid: {gridPosition}, World: {transform.position}");
+        LogMovement($"[Player] Snapped to Grid: {gridPosition}, World: {transform.position}");
     }
 
     protected override void Start()
@@ -178,6 +182,27 @@ public class Player : GridEntity
         // Başlangıçta da pickup kontrolü yap
         CheckForPickups();
 
-        Debug.Log($"[Player] Initialized at Grid: {gridPosition}, World: {transform.position}");
+        LogMovement($"[Player] Initialized at Grid: {gridPosition}, World: {transform.position}");
     }
+
+    // Utility methods
+    private void LogMovement(string message)
+    {
+        if (enableMovementLogs)
+        {
+            Debug.Log(message);
+        }
+    }
+
+    private void LogPickup(string message)
+    {
+        if (enablePickupLogs)
+        {
+            Debug.Log(message);
+        }
+    }
+
+    // Public state access
+    public bool IsSliding => isSliding;
+    public Vector2Int SlideDirection => isSliding ? currentSlideDirection : Vector2Int.zero;
 }

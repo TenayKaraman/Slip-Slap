@@ -1,81 +1,194 @@
 using UnityEngine;
+using System.Collections;
+using static Crystal;
 
+/// <summary>
+/// Crystal - Aþama 4 Refactor
+/// Enhanced visual effects, performance optimization, and better debugging
+/// </summary>
 public class Crystal : MonoBehaviour
 {
-    [Header("Crystal Settings")]
-    public CrystalType crystalType = CrystalType.Red;
-    public int crystalValue = 1;
-
-    [Header("Visual Effects")]
-    public float pulseSpeed = 2f;
-    public float pulseScale = 0.1f;
-
-    private Vector3 originalScale;
-    public bool isCollected = false; // Bu field public yapýldý
-
     public enum CrystalType
     {
-        Red,
-        Blue,
-        Yellow,
-        Purple
+        Red,    // Iþýn Kýlýcý
+        Blue,   // EMP Kristali
+        Yellow, // Kalkan
+        Purple  // Faz Kaymasý
     }
 
-    void Start()
+    [Header("Crystal Configuration")]
+    [SerializeField] private CrystalType crystalType = CrystalType.Red;
+    [SerializeField] private int crystalValue = 1;
+
+    [Header("Visual Effects")]
+    [SerializeField] private float pulseSpeed = 2f;
+    [SerializeField] private float pulseScale = 0.1f;
+    [SerializeField] private float collectionDuration = 0.3f;
+    [SerializeField] private bool enableGlowEffect = true;
+
+    [Header("Debug Settings")]
+    [SerializeField] private bool enableCollectionLogs = true;
+    [SerializeField] private bool enableVisualLogs = false;
+
+    // Public state
+    public bool isCollected { get; private set; } = false;
+
+    // Cached components
+    private Vector3 originalScale;
+    private SpriteRenderer spriteRenderer;
+    private Collider2D crystalCollider;
+    private Color originalColor;
+
+    // Animation state
+    private bool isAnimating = false;
+    private float pulseTimer = 0f;
+
+    private void Awake()
+    {
+        CacheComponents();
+    }
+
+    private void Start()
+    {
+        InitializeCrystal();
+    }
+
+    private void Update()
+    {
+        if (!isCollected && !isAnimating)
+        {
+            UpdatePulseAnimation();
+        }
+    }
+
+    private void OnValidate()
+    {
+        // Clamp values in editor
+        crystalValue = Mathf.Max(1, crystalValue);
+        pulseSpeed = Mathf.Max(0.1f, pulseSpeed);
+        pulseScale = Mathf.Clamp(pulseScale, 0f, 1f);
+        collectionDuration = Mathf.Clamp(collectionDuration, 0.1f, 2f);
+    }
+
+    // INITIALIZATION
+    private void CacheComponents()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        crystalCollider = GetComponent<Collider2D>();
+
+        if (spriteRenderer == null)
+        {
+            Debug.LogError($"[Crystal] {gameObject.name} missing SpriteRenderer component!");
+        }
+
+        if (crystalCollider == null)
+        {
+            LogVisual($"[Crystal] {gameObject.name} missing Collider2D - trigger collection won't work");
+        }
+    }
+
+    private void InitializeCrystal()
     {
         originalScale = transform.localScale;
+        SetCrystalVisuals();
 
-        // Kristal tipine göre renk ayarla
-        SetCrystalColor();
+        LogCollection($"Crystal initialized: Type={crystalType}, Value={crystalValue}");
     }
 
-    void Update()
+    private void SetCrystalVisuals()
     {
-        // Kristal nabýz animasyonu
-        if (!isCollected)
+        if (spriteRenderer == null) return;
+
+        Color crystalColor = GetCrystalColor();
+        spriteRenderer.color = crystalColor;
+        originalColor = crystalColor;
+
+        LogVisual($"Crystal color set to {crystalColor} for type {crystalType}");
+    }
+
+    private Color GetCrystalColor()
+    {
+        return crystalType switch
         {
-            float pulse = Mathf.Sin(Time.time * pulseSpeed) * pulseScale;
-            transform.localScale = originalScale + Vector3.one * pulse;
+            CrystalType.Red => Color.red,
+            CrystalType.Blue => Color.blue,
+            CrystalType.Yellow => Color.yellow,
+            CrystalType.Purple => new Color(0.5f, 0f, 1f),
+            _ => Color.white
+        };
+    }
+
+    // ANIMATION SYSTEM
+    private void UpdatePulseAnimation()
+    {
+        pulseTimer += Time.deltaTime * pulseSpeed;
+        float pulse = Mathf.Sin(pulseTimer) * pulseScale;
+        transform.localScale = originalScale + Vector3.one * pulse;
+
+        // Glow effect
+        if (enableGlowEffect && spriteRenderer != null)
+        {
+            float glowIntensity = (Mathf.Sin(pulseTimer * 1.5f) + 1f) * 0.5f; // 0-1 range
+            Color glowColor = Color.Lerp(originalColor, Color.white, glowIntensity * 0.3f);
+            spriteRenderer.color = glowColor;
         }
     }
 
-    void SetCrystalColor()
+    private void StopAnimation()
     {
-        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-        if (renderer == null) return;
+        isAnimating = true;
+        transform.localScale = originalScale;
 
-        switch (crystalType)
+        if (spriteRenderer != null)
         {
-            case CrystalType.Red:
-                renderer.color = Color.red;
-                break;
-            case CrystalType.Blue:
-                renderer.color = Color.blue;
-                break;
-            case CrystalType.Yellow:
-                renderer.color = Color.yellow;
-                break;
-            case CrystalType.Purple:
-                renderer.color = new Color(0.5f, 0f, 1f); // Mor
-                break;
+            spriteRenderer.color = originalColor;
         }
     }
 
-    /// <summary>
-    /// Kristal toplanma iþlemi
-    /// </summary>
+    // COLLECTION SYSTEM
     public void CollectCrystal(Player collector)
     {
-        if (isCollected) return;
+        if (collector == null)
+        {
+            Debug.LogError("[Crystal] Cannot collect crystal - collector is null");
+            return;
+        }
 
+        if (isCollected)
+        {
+            LogCollection("Crystal already collected - ignoring");
+            return;
+        }
+
+        PerformCollection(collector);
+    }
+
+    private void PerformCollection(Player collector)
+    {
         isCollected = true;
+        StopAnimation();
 
-        Debug.Log($"[Crystal] {crystalType} crystal collected by {collector.name}");
+        LogCollection($"{crystalType} crystal collected by {collector.name}");
 
-        // GameManager'a kristal toplandýðýný bildir
+        // Disable collider immediately
+        if (crystalCollider != null)
+        {
+            crystalCollider.enabled = false;
+        }
+
+        // Notify game systems
+        NotifyGameSystems();
+
+        // Start collection effect
+        StartCoroutine(CollectionEffectCoroutine());
+    }
+
+    private void NotifyGameSystems()
+    {
+        // Notify GameManager
         if (GameManager.Instance != null)
         {
-            Debug.Log($"[Crystal] Calling GameManager.CollectCrystal({crystalValue})");
+            LogCollection($"Notifying GameManager - adding {crystalValue} crystals");
             GameManager.Instance.CollectCrystal(crystalValue);
         }
         else
@@ -83,59 +196,166 @@ public class Crystal : MonoBehaviour
             Debug.LogError("[Crystal] GameManager.Instance is null!");
         }
 
-        // CrystalManager'a tipine göre bildir (yetenek sistemi için)
+        // Notify CrystalManager
         if (CrystalManager.Instance != null)
         {
             CrystalManager.Instance.CollectCrystalByType(crystalType);
         }
-
-        // Toplama efekti ve yok etme
-        StartCoroutine(CollectionEffect());
+        else
+        {
+            LogCollection("CrystalManager not found - ability progression won't work");
+        }
     }
 
-    System.Collections.IEnumerator CollectionEffect()
+    // COLLECTION EFFECTS
+    private IEnumerator CollectionEffectCoroutine()
     {
-        // Büyüme animasyonu
-        float timer = 0f;
-        float duration = 0.3f;
+        float elapsedTime = 0f;
+        Vector3 startScale = originalScale;
+        Color startColor = originalColor;
 
-        while (timer < duration)
+        LogVisual("Starting collection effect animation");
+
+        // Collection animation
+        while (elapsedTime < collectionDuration)
         {
-            timer += Time.deltaTime;
-            float progress = timer / duration;
+            elapsedTime += Time.deltaTime;
+            float progress = elapsedTime / collectionDuration;
 
-            // Büyüme ve saydamlýk
-            transform.localScale = originalScale * (1f + progress);
+            // Smooth easing curve
+            float easedProgress = EaseOutCubic(progress);
 
-            SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-            if (renderer != null)
-            {
-                Color color = renderer.color;
-                color.a = 1f - progress;
-                renderer.color = color;
-            }
-
+            UpdateCollectionEffect(easedProgress, startScale, startColor);
             yield return null;
         }
 
-        // Kristali yok et
+        // Destroy crystal
+        LogVisual("Collection effect complete - destroying crystal");
+        DestroyCrystal();
+    }
+
+    private void UpdateCollectionEffect(float progress, Vector3 startScale, Color startColor)
+    {
+        // Scale up effect
+        float scaleMultiplier = 1f + (progress * 0.5f); // Grow by 50%
+        transform.localScale = startScale * scaleMultiplier;
+
+        // Fade out effect
+        if (spriteRenderer != null)
+        {
+            Color currentColor = startColor;
+            currentColor.a = 1f - progress;
+            spriteRenderer.color = currentColor;
+        }
+
+        // Optional spin effect
+        if (enableGlowEffect)
+        {
+            float rotation = progress * 180f; // Half rotation during collection
+            transform.rotation = Quaternion.Euler(0, 0, rotation);
+        }
+    }
+
+    private float EaseOutCubic(float t)
+    {
+        return 1f - Mathf.Pow(1f - t, 3f);
+    }
+
+    private void DestroyCrystal()
+    {
+        LogCollection($"{crystalType} crystal destroyed after collection");
         Destroy(gameObject);
     }
 
-    /// <summary>
-    /// Trigger ile player tespiti (backup sistem)
-    /// </summary>
-    void OnTriggerEnter2D(Collider2D other)
+    // TRIGGER COLLECTION (BACKUP SYSTEM)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"Crystal trigger entered by: {other.name}");
-
         if (isCollected) return;
+
+        LogCollection($"Trigger entered by: {other.name}");
 
         Player player = other.GetComponent<Player>();
         if (player != null)
         {
-            Debug.Log("Player detected via trigger - collecting crystal");
+            LogCollection("Player detected via trigger - collecting crystal");
             CollectCrystal(player);
+        }
+    }
+
+    // UTILITY METHODS
+    public string GetAbilityName()
+    {
+        return _crystalType switch
+        {
+            CrystalType.Red => "Iþýn Kýlýcý",
+            CrystalType.Blue => "EMP Kristali",
+            CrystalType.Yellow => "Kalkan",
+            CrystalType.Purple => "Faz Kaymasý",
+            _ => "Unknown Ability"
+        };
+    }
+
+    public CrystalType GetCrystalType() => _crystalType;
+    public int GetValue() => crystalValue;
+    public bool IsCollected() => isCollected;
+
+    // LOGGING
+    private void LogCollection(string message)
+    {
+        if (enableCollectionLogs)
+        {
+            Debug.Log($"[Crystal] {message}");
+        }
+    }
+
+    private void LogVisual(string message)
+    {
+        if (enableVisualLogs)
+        {
+            Debug.Log($"[Crystal] {message}");
+        }
+    }
+
+    // EDITOR SUPPORT
+    [ContextMenu("Test Collection")]
+    private void EditorTestCollection()
+    {
+        if (Application.isPlaying)
+        {
+            Player player = FindObjectOfType<Player>();
+            if (player != null)
+            {
+                CollectCrystal(player);
+            }
+            else
+            {
+                Debug.LogWarning("No player found for test collection");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Test collection only works in play mode");
+        }
+    }
+
+    [ContextMenu("Reset Crystal")]
+    private void EditorResetCrystal()
+    {
+        if (Application.isPlaying)
+        {
+            isCollected = false;
+            isAnimating = false;
+
+            if (crystalCollider != null)
+                crystalCollider.enabled = true;
+
+            if (spriteRenderer != null)
+                spriteRenderer.color = originalColor;
+
+            transform.localScale = originalScale;
+            transform.rotation = Quaternion.identity;
+
+            LogCollection("Crystal reset to initial state");
         }
     }
 }

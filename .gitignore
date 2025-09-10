@@ -9,4 +9,10 @@
 [Ll]ogs/
 [Mm]emoryCaptures/
 UserSettings/
+# Visual Studio
+.vs/
+*.user
+*.suo
+bin/
+obj/
 

@@ -1,106 +1,194 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Main game state manager - Aşama 1 Refactor
+/// Mevcut kod ile uyumlu, minimal breaking changes
+/// </summary>
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
 
     [Header("Game State")]
-    public int currentLevel = 1;
-    public int playerLives = 5;
-    public int crystalsCollected = 0;
+    [SerializeField] private int _currentLevel = 1;
+    [SerializeField] private int _playerLives = 5;
+    [SerializeField] private int _crystalsCollected = 0;
 
-    void Awake()
+    // Public properties for new code
+    public int CurrentLevel => _currentLevel;
+    public int PlayerLives => _playerLives;
+    public int CrystalsCollected => _crystalsCollected;
+
+    // Backward compatibility - old public fields (deprecated but working)
+    [System.Obsolete("Use CurrentLevel property instead")]
+    public int currentLevel
+    {
+        get => _currentLevel;
+        set => _currentLevel = value;
+    }
+
+    [System.Obsolete("Use PlayerLives property instead")]
+    public int playerLives
+    {
+        get => _playerLives;
+        set => _playerLives = value;
+    }
+
+    [System.Obsolete("Use CrystalsCollected property instead")]
+    public int crystalsCollected
+    {
+        get => _crystalsCollected;
+        set => _crystalsCollected = value;
+    }
+
+    [Header("Settings")]
+    [SerializeField] private float sceneTransitionDelay = 3f;
+    [SerializeField] private bool enableDebugLogs = true;
+
+    private void Awake()
+    {
+        InitializeSingleton();
+    }
+
+    private void Start()
+    {
+        LogDebug("GameManager initialized successfully!");
+        LogDebug($"Starting stats - Lives: {_playerLives}, Crystals: {_crystalsCollected}, Level: {_currentLevel}");
+
+        // Delayed level start (same as before)
+        Invoke("TestStartLevel", sceneTransitionDelay);
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
+    private void InitializeSingleton()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            LogDebug("GameManager singleton initialized");
         }
         else
         {
+            LogDebug("Duplicate GameManager destroyed");
             Destroy(gameObject);
         }
     }
 
-    void Start()
-    {
-        Debug.Log("GameManager initialized successfully!");
-        Debug.Log($"Player Lives: {playerLives}");
-
-        // 3 saniye sonra level'i başlat (test için)
-        Invoke("TestStartLevel", 3f);
-    }
-
-    void TestStartLevel()
+    private void TestStartLevel()
     {
         StartLevel("Level_001");
     }
 
     public void StartLevel(string sceneName)
     {
-        Debug.Log($"Starting level: {sceneName}");
+        if (string.IsNullOrEmpty(sceneName))
+        {
+            Debug.LogError("[GameManager] Scene name cannot be null or empty");
+            return;
+        }
+
+        LogDebug($"Starting level: {sceneName}");
         SceneManager.LoadScene(sceneName);
     }
 
     public void CompleteLevel()
     {
-        Debug.Log("Level Complete!");
-        currentLevel++;
-        // Sonraki seviye veya menüye dön
+        LogDebug($"Level {_currentLevel} completed!");
+
+        _currentLevel++;
+        NotifyUIUpdate();
+
+        LogDebug($"Advanced to level: {_currentLevel}");
     }
 
-    public void GameOver()
+    public void RestartLevel()
     {
-        playerLives--;
-        if (playerLives <= 0)
-        {
-            Debug.Log("Game Over!");
-            // Game over UI göster
-        }
-        else
-        {
-            // Seviyeyi yeniden başlat
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        }
+        string currentScene = SceneManager.GetActiveScene().name;
+        LogDebug($"Restarting level: {currentScene}");
+        SceneManager.LoadScene(currentScene);
     }
 
     public void CollectCrystal(int amount = 1)
     {
-        crystalsCollected += amount;
-        Debug.Log($"[GameManager] Crystals collected: {crystalsCollected} (+{amount})");
+        if (amount <= 0)
+        {
+            Debug.LogWarning("[GameManager] Crystal amount must be positive");
+            return;
+        }
 
-        // UI'ı güncelle - Hemen güncelle
-        UpdateUI();
+        _crystalsCollected += amount;
+        LogDebug($"Crystals collected: {_crystalsCollected} (+{amount})");
+
+        NotifyUIUpdate();
     }
 
     public void SpendLife()
     {
-        playerLives--;
-        Debug.Log($"Lives remaining: {playerLives}");
+        if (_playerLives <= 0)
+        {
+            Debug.LogWarning("[GameManager] No lives remaining");
+            return;
+        }
 
-        // UI'ı güncelle
-        UpdateUI();
+        _playerLives--;
+        LogDebug($"Life lost. Lives remaining: {_playerLives}");
 
-        if (playerLives <= 0)
+        NotifyUIUpdate();
+
+        if (_playerLives <= 0)
         {
             GameOver();
         }
     }
 
-    /// <summary>
-    /// UI'ı hemen güncelle (UIManager'a bildir)
-    /// </summary>
-    private void UpdateUI()
+    public void AddLife()
+    {
+        _playerLives++;
+        LogDebug($"Life gained. Total lives: {_playerLives}");
+        NotifyUIUpdate();
+    }
+
+    private void GameOver()
+    {
+        LogDebug("Game Over!");
+        // TODO: Game over logic
+    }
+
+    private void NotifyUIUpdate()
     {
         if (UIManager.Instance != null)
         {
             UIManager.Instance.UpdateUI();
-            Debug.Log("[GameManager] UI updated");
+            LogDebug("UI update requested");
         }
         else
         {
-            Debug.LogWarning("[GameManager] UIManager.Instance is null - cannot update UI");
+            Debug.LogWarning("[GameManager] UIManager not found - UI not updated");
         }
+    }
+
+    private void LogDebug(string message)
+    {
+        if (enableDebugLogs)
+        {
+            Debug.Log($"[GameManager] {message}");
+        }
+    }
+
+    private void OnValidate()
+    {
+        // Keep values within reasonable bounds
+        _playerLives = Mathf.Max(0, _playerLives);
+        _crystalsCollected = Mathf.Max(0, _crystalsCollected);
+        _currentLevel = Mathf.Max(1, _currentLevel);
+        sceneTransitionDelay = Mathf.Max(0.1f, sceneTransitionDelay);
     }
 }

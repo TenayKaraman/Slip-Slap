@@ -1,0 +1,4 @@
+Assets\Scripts\GridSystem\GridManager.cs(233,42): error CS0122: 'Crystal.crystalType' is inaccessible due to its protection level
+
+Assets\Scripts\GridSystem\GridManager.cs(234,83): error CS0122: 'Crystal.crystalType' is inaccessible due to its protection level
+

@@ -2,118 +2,136 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
+/// <summary>
+/// UIManager - Aþama 2 Refactor
+/// Fixes scene transition UI reference issues
+/// </summary>
 public class UIManager : MonoBehaviour
 {
-    public static UIManager Instance;
+    public static UIManager Instance { get; private set; }
 
     [Header("UI References")]
-    public TextMeshProUGUI livesText;
-    public TextMeshProUGUI crystalsText;
-    public TextMeshProUGUI levelText;
+    [SerializeField] private TextMeshProUGUI livesText;
+    [SerializeField] private TextMeshProUGUI crystalsText;
+    [SerializeField] private TextMeshProUGUI levelText;
 
-    void Awake()
+    [Header("Settings")]
+    [SerializeField] private float referenceRefreshDelay = 0.1f;
+    [SerializeField] private bool enableDebugLogs = false;
+    [SerializeField] private bool forceAutoFind = true; // Her scene'de otomatik bul
+
+    private void Awake()
+    {
+        InitializeSingleton();
+    }
+
+    private void Start()
+    {
+        LogDebug("UIManager starting - Finding UI references...");
+        FindUIReferences();
+        UpdateUI();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            Instance = null;
+        }
+    }
+
+    private void InitializeSingleton()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-
-            // SceneManager event'ine subscribe ol
             SceneManager.sceneLoaded += OnSceneLoaded;
+            LogDebug("UIManager singleton initialized");
         }
         else
         {
+            Debug.LogWarning("[UIManager] Duplicate instance destroyed");
             Destroy(gameObject);
         }
     }
 
-    void Start()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("[UIManager] Starting - Finding UI references...");
-        // UI referanslarýný bul (eðer scene'de atanmamýþsa)
-        FindUIReferences();
-        UpdateUI();
+        LogDebug($"Scene loaded: {scene.name} - Refreshing UI references");
+
+        // Her scene deðiþikliðinde referanslarý yenile
+        ClearReferences();
+        Invoke(nameof(DelayedRefresh), referenceRefreshDelay);
     }
 
-    void OnDestroy()
+    private void ClearReferences()
     {
-        // Event'ten unsubscribe ol (memory leak önlemek için)
-        if (Instance == this)
+        if (forceAutoFind)
         {
-            SceneManager.sceneLoaded -= OnSceneLoaded;
+            livesText = null;
+            crystalsText = null;
+            levelText = null;
+            LogDebug("UI references cleared for auto-find");
         }
     }
 
-    // Yeni SceneManager event handler
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void FindUIReferences()
     {
-        Debug.Log($"[UIManager] Scene loaded: {scene.name} - Refreshing UI references");
+        LogDebug("Finding UI references...");
 
-        // Eski referanslarý temizle
-        livesText = null;
-        crystalsText = null;
-        levelText = null;
-
-        StartCoroutine(RefreshNextFrame());
-    }
-
-    System.Collections.IEnumerator RefreshNextFrame()
-    {
-        yield return null; // 1 frame bekle
-        FindUIReferences();
-        UpdateUI();
-    }
-
-
-    void FindUIReferences()
-    {
-        Debug.Log("[UIManager] Finding UI references...");
-
-        // Eðer inspector'dan atanmamýþsa, scene'de bul
+        // Lives Text
         if (livesText == null)
         {
-            GameObject livesObj = GameObject.Find("LivesText");
-            if (livesObj != null)
-            {
-                livesText = livesObj.GetComponent<TextMeshProUGUI>();
-                Debug.Log("[UIManager] Found LivesText component");
-            }
-            else
-            {
-                Debug.LogWarning("[UIManager] LivesText GameObject not found in scene!");
-            }
+            livesText = FindUIComponent<TextMeshProUGUI>("LivesText");
+            LogDebug($"LivesText found: {livesText != null}");
         }
 
+        // Crystals Text
         if (crystalsText == null)
         {
-            GameObject crystalsObj = GameObject.Find("CrystalsText");
-            if (crystalsObj != null)
-            {
-                crystalsText = crystalsObj.GetComponent<TextMeshProUGUI>();
-                Debug.Log("[UIManager] Found CrystalsText component");
-            }
-            else
-            {
-                Debug.LogWarning("[UIManager] CrystalsText GameObject not found in scene!");
-            }
+            crystalsText = FindUIComponent<TextMeshProUGUI>("CrystalsText");
+            LogDebug($"CrystalsText found: {crystalsText != null}");
         }
 
+        // Level Text  
         if (levelText == null)
         {
-            GameObject levelObj = GameObject.Find("LevelText");
-            if (levelObj != null)
+            levelText = FindUIComponent<TextMeshProUGUI>("LevelText");
+            LogDebug($"LevelText found: {levelText != null}");
+        }
+
+        LogDebug($"UI References Status: Lives={livesText != null}, Crystals={crystalsText != null}, Level={levelText != null}");
+    }
+
+    private T FindUIComponent<T>(string objectName) where T : Component
+    {
+        // Önce GameObject.Find ile dene
+        GameObject obj = GameObject.Find(objectName);
+        if (obj != null)
+        {
+            T component = obj.GetComponent<T>();
+            if (component != null)
             {
-                levelText = levelObj.GetComponent<TextMeshProUGUI>();
-                Debug.Log("[UIManager] Found LevelText component");
-            }
-            else
-            {
-                Debug.LogWarning("[UIManager] LevelText GameObject not found in scene!");
+                LogDebug($"Found {objectName} component via GameObject.Find");
+                return component;
             }
         }
 
-        // Referanslarýn durumu
-        Debug.Log($"[UIManager] UI References Status: Lives={livesText != null}, Crystals={crystalsText != null}, Level={levelText != null}");
+        // Bulamazsa FindObjectOfType ile tüm sahnede ara
+        T[] allComponents = FindObjectsOfType<T>();
+        foreach (T comp in allComponents)
+        {
+            if (comp.gameObject.name.Contains(objectName.Replace("Text", "")))
+            {
+                LogDebug($"Found {objectName} component via FindObjectsOfType fallback");
+                return comp;
+            }
+        }
+
+        Debug.LogWarning($"[UIManager] Could not find {objectName} in scene");
+        return null;
     }
 
     public void UpdateUI()
@@ -124,32 +142,50 @@ public class UIManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"[UIManager] Updating UI - Lives: {GameManager.Instance.playerLives}, Crystals: {GameManager.Instance.crystalsCollected}, Level: {GameManager.Instance.currentLevel}");
+        // Yeni property-based access kullan
+        int lives = GameManager.Instance.PlayerLives;
+        int crystals = GameManager.Instance.CrystalsCollected;
+        int level = GameManager.Instance.CurrentLevel;
 
+        LogDebug($"Updating UI - Lives: {lives}, Crystals: {crystals}, Level: {level}");
+
+        UpdateLivesText(lives);
+        UpdateCrystalsText(crystals);
+        UpdateLevelText(level);
+    }
+
+    private void UpdateLivesText(int lives)
+    {
         if (livesText != null)
         {
-            livesText.text = "Lives: " + GameManager.Instance.playerLives;
-            Debug.Log($"[UIManager] Updated livesText: {livesText.text}");
+            livesText.text = $"Lives: {lives}";
+            LogDebug($"Updated livesText: {livesText.text}");
         }
         else
         {
             Debug.LogError("[UIManager] livesText is null - cannot update lives display");
         }
+    }
 
+    private void UpdateCrystalsText(int crystals)
+    {
         if (crystalsText != null)
         {
-            crystalsText.text = "Crystals: " + GameManager.Instance.crystalsCollected;
-            Debug.Log($"[UIManager] Updated crystalsText: {crystalsText.text}");
+            crystalsText.text = $"Crystals: {crystals}";
+            LogDebug($"Updated crystalsText: {crystals}");
         }
         else
         {
             Debug.LogError("[UIManager] crystalsText is null - cannot update crystals display");
         }
+    }
 
+    private void UpdateLevelText(int level)
+    {
         if (levelText != null)
         {
-            levelText.text = "Level: " + GameManager.Instance.currentLevel;
-            Debug.Log($"[UIManager] Updated levelText: {levelText.text}");
+            levelText.text = $"Level: {level}";
+            LogDebug($"Updated levelText: {levelText.text}");
         }
         else
         {
@@ -157,10 +193,41 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    void DelayedRefresh()
+    private void DelayedRefresh()
     {
-        Debug.Log("[UIManager] Delayed refresh starting...");
+        LogDebug("Delayed refresh starting...");
         FindUIReferences();
         UpdateUI();
+    }
+
+    // Manual assignment support
+    public void SetUIReferences(TextMeshProUGUI lives, TextMeshProUGUI crystals, TextMeshProUGUI level)
+    {
+        livesText = lives;
+        crystalsText = crystals;
+        levelText = level;
+        LogDebug("UI references manually assigned");
+        UpdateUI();
+    }
+
+    public void RefreshReferences()
+    {
+        ClearReferences();
+        FindUIReferences();
+        UpdateUI();
+        LogDebug("References manually refreshed");
+    }
+
+    private void LogDebug(string message)
+    {
+        if (enableDebugLogs)
+        {
+            Debug.Log($"[UIManager] {message}");
+        }
+    }
+
+    private void OnValidate()
+    {
+        referenceRefreshDelay = Mathf.Max(0.05f, referenceRefreshDelay);
     }
 }
